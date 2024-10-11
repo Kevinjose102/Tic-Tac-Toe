@@ -7,8 +7,36 @@
     <title>Tic Tac Toe</title>
 </head>
 <body>
+    <button class="play">PLAY</button>
+    <dialog class="playerone">
+        <div class="player-header"></div>
+        <div>
+            <input class="name" type="text" placeholder="NAME">
+            <div class="error"></div>
+        </div>
+        <div class="toggle-symbols">
+            <button class="toggle-symbol" id="X">X</button>
+            <button class="toggle-symbol" id="O">O</button>
+        </div>
+        <input type="submit" class="next">
+        <button class="cancel">Cancel</button>
+    </dialog>
+    <dialog class="playertwo">
+        <div class="player-header"></div>
+        <div>
+            <input class="name" type="text" placeholder="NAME">
+            <div class="error"></div>
+        </div>
+        <div class="toggle-symbols">
+            <button class="toggle-symbol" id="X">X</button>
+            <button class="toggle-symbol" id="O">O</button>
+        </div>
+        <input type="submit" class="submit">
+        <button class="cancel">Cancel</button>
+    </dialog>
     <div class="turn"></div>
     <div class="board"></div>
+    <div class="result"></div>
 </body>
 <script src="./script.js"></script>
 </html>

@@ -1,5 +1,38 @@
 let globalWon = false;
 
+const result = document.querySelector(".result")
+
+const dialogOne = document.querySelector(".playerone")
+const dialogTwo = document.querySelector(".playertwo")
+const nextButton = document.querySelector(".next")
+const submitButton = document.querySelector(".submit")
+const cancelButtons = document.querySelectorAll(".cancel")
+const playButton = document.querySelector(".play")
+
+playButton.addEventListener("click", () => {
+    dialogOne.showModal();
+    globalWon = false
+    result.textContent = ""
+    playButton.textContent = "RESET"
+})
+
+cancelButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+        dialogOne.close();
+        dialogTwo.close();
+    })
+})
+
+nextButton.addEventListener("click", () => {
+    dialogOne.close();
+    dialogTwo.showModal();
+})
+
+submitButton.addEventListener("click", () => {
+    dialogTwo.close();
+    Screen();
+})
+
 //state of the game board
 function GameBoard(){
     const rows = 3;
@@ -24,7 +57,7 @@ function GameBoard(){
     //to print the board on the console
     const printBoard = () => {
         const boardValues = board.map((row) => row.map((cell) => cell.getValue()))
-        console.log(boardValues)
+        //console.log(boardValues)
     }
 
     return{getBoard, changeCell, printBoard}
@@ -93,7 +126,6 @@ function GameFlow(
     const printNewRound = (won) => {
         if(!won){
             board.printBoard();
-            console.log(getActivePlayer().name + "'s turn")
         }
         else{
             return;
@@ -105,7 +137,6 @@ function GameFlow(
     //also the player has to be switched now changing the active player
     const playRound = (row, column) => {
         if(board.getBoard()[row][column].getValue() == 0){
-            console.log("adding the" + getActivePlayer().name + "value to" + row + " " + column)
             board.changeCell(row, column, getActivePlayer().token)
 
             //flag will remain 0 if the active player has won
@@ -154,10 +185,11 @@ function GameFlow(
         
             if (won) {
                 //should stop the game
-                console.log(getActivePlayer().name + " won the round");
                 switchTurn(won);
                 printNewRound(won);
                 globalWon = true;
+                result.textContent = getActivePlayer().name +  " won the round"
+                playButton.textContent = "PLAY"
                 return;
             } else {
                 switchTurn(won);
@@ -171,12 +203,13 @@ function GameFlow(
 
 function Screen() {
     const game = GameFlow();
-    const playerTurn = document.querySelector(".turn")
+    
     const boardDiv = document.querySelector(".board")
 
     const updateScreen = () => {
         boardDiv.textContent = "";
         const board = game.getBoard();
+        const playerTurn = document.querySelector(".turn")
         const activePlayer = game.getActivePlayer();
 
         playerTurn.textContent = `${activePlayer.name}'s turn..`
@@ -188,7 +221,13 @@ function Screen() {
                 cellButton.classList.add("cell")
                 cellButton.dataset.column = index
                 cellButton.dataset.row = indexRow
-                cellButton.textContent = cell.getValue();
+
+                if(cell.getValue() == 1){
+                    cellButton.textContent = "X"
+                }
+                else if(cell.getValue() == 2){
+                    cellButton.textContent = "O"
+                }
                 boardDiv.appendChild(cellButton);
             })
         })
@@ -209,5 +248,3 @@ boardDiv.addEventListener("click", clickHandlerBoard);
 updateScreen();
 }
 
-console.log("Player 1's turn")
-Screen();
