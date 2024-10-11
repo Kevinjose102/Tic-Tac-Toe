@@ -1,3 +1,5 @@
+let globalWon = false;
+
 //state of the game board
 function GameBoard(){
     const rows = 3;
@@ -70,12 +72,17 @@ function GameFlow(
     let activePlayer = players[0]
 
     //should be called after the playround() to switch the player 
-    const switchTurn = () => {
-        if(activePlayer === players[0]){
-            activePlayer = players[1];
+    const switchTurn = (won) => {
+        if(!won){
+            if(activePlayer === players[0]){
+                activePlayer = players[1];
+            }
+            else{
+                activePlayer = players[0]
+            }
         }
         else{
-            activePlayer = players[0]
+            return;
         }
     }
 
@@ -83,67 +90,79 @@ function GameFlow(
 
     //should be called after each round or after each players turn so that the new state of the board
     //is displayed on the console
-    const printNewRound = () => {
-        board.printBoard();
-        console.log(getActivePlayer().name + "'s turn")
+    const printNewRound = (won) => {
+        if(!won){
+            board.printBoard();
+            console.log(getActivePlayer().name + "'s turn")
+        }
+        else{
+            return;
+        }
     };
 
     //when the current activeplayer is done with his turn
     //the value should be changed in the gameboard and the new board should be printed
     //also the player has to be switched now changing the active player
     const playRound = (row, column) => {
-        console.log("adding the" + getActivePlayer().name + "value to" + row + " " + column)
-        board.changeCell(row, column, getActivePlayer().token)
+        if(board.getBoard()[row][column].getValue() == 0){
+            console.log("adding the" + getActivePlayer().name + "value to" + row + " " + column)
+            board.changeCell(row, column, getActivePlayer().token)
 
-        //flag will remain 0 if the active player has won
-        //else will change to 1
-        let won = true;
-    
-        // Check row
-        for (let i = 0; i < 3; i++) {
-            if (board.getBoard()[row][i].getValue() !== getActivePlayer().token) {
-                won = false;
-                break;
-            }
-        }
-    
-        // Check column
-        if (!won) { 
-            won = true;
+            //flag will remain 0 if the active player has won
+            //else will change to 1
+            let won = true;
+        
+            // Check row
             for (let i = 0; i < 3; i++) {
-                if (board.getBoard()[i][column].getValue() !== getActivePlayer().token) {
+                if (board.getBoard()[row][i].getValue() !== getActivePlayer().token) {
                     won = false;
                     break;
                 }
             }
-        }
-    
-        // Check diagonals if row and column are on a diagonal
-        if (!won && row === column) {
-            won = true;
-            for (let i = 0; i < 3; i++) {
-                if (board.getBoard()[i][i].getValue() !== getActivePlayer().token) {
-                    won = false;
-                    break;
+        
+            // Check column
+            if (!won) { 
+                won = true;
+                for (let i = 0; i < 3; i++) {
+                    if (board.getBoard()[i][column].getValue() !== getActivePlayer().token) {
+                        won = false;
+                        break;
+                    }
                 }
             }
-        }
-    
-        if (!won && row + column === 2) {
-            won = true;
-            for (let i = 0; i < 3; i++) {
-                if (board.getBoard()[i][2 - i].getValue() !== getActivePlayer().token) {
-                    won = false;
-                    break;
+        
+            // Check diagonals if row and column are on a diagonal
+            if (!won && row === column) {
+                won = true;
+                for (let i = 0; i < 3; i++) {
+                    if (board.getBoard()[i][i].getValue() !== getActivePlayer().token) {
+                        won = false;
+                        break;
+                    }
                 }
             }
-        }
-    
-        if (won) {
-            console.log(getActivePlayer().name + " won the round");
-        } else {
-            switchTurn();
-            printNewRound();
+        
+            if (!won){
+                won = true;
+                for (let i = 0; i < 3; i++) {
+                    if (board.getBoard()[i][2 - i].getValue() !== getActivePlayer().token) {
+                        won = false;
+                        break;
+                    }
+                }
+            }
+        
+            if (won) {
+                //should stop the game
+                console.log(getActivePlayer().name + " won the round");
+                switchTurn(won);
+                printNewRound(won);
+                globalWon = true;
+                return;
+            } else {
+                switchTurn(won);
+                printNewRound(won);
+            }
         }
     }
     return {playRound, getActivePlayer, getBoard: board.getBoard}
@@ -180,7 +199,9 @@ function clickHandlerBoard(e) {
     const selectedColumn = e.target.dataset.column;
     const selectedRow = e.target.dataset.row;
     if(!selectedColumn || !selectedRow) return;
-    game.playRound(selectedRow, selectedColumn);
+    if(!globalWon){
+        game.playRound(selectedRow, selectedColumn);
+    }
     updateScreen();
 }
 
@@ -188,4 +209,5 @@ boardDiv.addEventListener("click", clickHandlerBoard);
 updateScreen();
 }
 
+console.log("Player 1's turn")
 Screen();
