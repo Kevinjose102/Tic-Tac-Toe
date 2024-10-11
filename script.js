@@ -1,6 +1,10 @@
 let globalWon = false;
 
-const result = document.querySelector(".result")
+//these global variables are only required for the HTML/CSS part of it
+//the game should "function" without these too 
+
+let playerone;
+let playertwo;
 
 const dialogOne = document.querySelector(".playerone")
 const dialogTwo = document.querySelector(".playertwo")
@@ -9,11 +13,18 @@ const submitButton = document.querySelector(".submit")
 const cancelButtons = document.querySelectorAll(".cancel")
 const playButton = document.querySelector(".play")
 
+//inputs from the user
+const player1name = document.querySelector(".name1")
+const player2name = document.querySelector(".name2")
+const error = document.querySelectorAll(".error")
+
+const body = document.querySelector("body")
+
 playButton.addEventListener("click", () => {
     dialogOne.showModal();
     globalWon = false
     result.textContent = ""
-    playButton.textContent = "RESET"
+    nextButton.value = "next"
 })
 
 cancelButtons.forEach((btn) => {
@@ -24,13 +35,38 @@ cancelButtons.forEach((btn) => {
 })
 
 nextButton.addEventListener("click", () => {
-    dialogOne.close();
-    dialogTwo.showModal();
+    if(player1name.value == ""){
+        error[0].textContent = "*this is a required field"
+    }
+    else{
+        playerone = player1name.value
+        dialogOne.close();
+        dialogTwo.showModal();
+    }
 })
 
 submitButton.addEventListener("click", () => {
-    dialogTwo.close();
-    Screen();
+    if(player2name.value == ""){
+        error[1].textContent = "*this is a required field"
+    }
+    else{
+        playertwo = player2name.value
+        dialogTwo.close();
+        playButton.textContent = "RESET"
+        //creating the grid
+        const createBoard = document.createElement("div");
+        createBoard.classList.add("board")
+
+        const createTurn = document.createElement("div")
+        createTurn.classList.add("turn")
+
+        const createResult = document.createElement("div")
+        createResult.classList.add("result")
+        body.appendChild(createTurn)
+        body.appendChild(createBoard)
+        body.appendChild(createResult)
+        Screen();
+    }
 })
 
 //state of the game board
@@ -86,8 +122,8 @@ function Cell(){
 //decides the current activer player starting initially from player 1
 //players are stored in a seperate array players as objects with their name and the token value (1/2)
 function GameFlow(
-    playerOneName = "Player 1",
-    playerTwoName = "Player 2"
+    playerOneName = playerone,
+    playerTwoName = playertwo
 ){
     const board = GameBoard();
 
@@ -188,6 +224,7 @@ function GameFlow(
                 switchTurn(won);
                 printNewRound(won);
                 globalWon = true;
+                const result = document.querySelector(".result")
                 result.textContent = getActivePlayer().name +  " won the round"
                 playButton.textContent = "PLAY"
                 return;
@@ -203,7 +240,7 @@ function GameFlow(
 
 function Screen() {
     const game = GameFlow();
-    
+
     const boardDiv = document.querySelector(".board")
 
     const updateScreen = () => {
@@ -247,4 +284,3 @@ function clickHandlerBoard(e) {
 boardDiv.addEventListener("click", clickHandlerBoard);
 updateScreen();
 }
-
