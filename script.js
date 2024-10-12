@@ -12,19 +12,25 @@ const nextButton = document.querySelector(".next")
 const submitButton = document.querySelector(".submit")
 const cancelButtons = document.querySelectorAll(".cancel")
 const playButton = document.querySelector(".play")
-
+nextButton.value = "next"
 //inputs from the user
 const player1name = document.querySelector(".name1")
 const player2name = document.querySelector(".name2")
 const error = document.querySelectorAll(".error")
 
 const body = document.querySelector("body")
-
+const container = document.querySelector(".container")
 playButton.addEventListener("click", () => {
     dialogOne.showModal();
     globalWon = false
-    result.textContent = ""
-    nextButton.value = "next"
+
+    const delturn = document.querySelector(".turn")
+    const delboard = document.querySelector(".board")
+    const delresult = document.querySelector(".result")
+    //clearing the old grid
+    container.removeChild(delturn)
+    container.removeChild(delboard)
+    container.removeChild(delresult)
 })
 
 cancelButtons.forEach((btn) => {
@@ -53,6 +59,7 @@ submitButton.addEventListener("click", () => {
         playertwo = player2name.value
         dialogTwo.close();
         playButton.textContent = "RESET"
+
         //creating the grid
         const createBoard = document.createElement("div");
         createBoard.classList.add("board")
@@ -62,9 +69,9 @@ submitButton.addEventListener("click", () => {
 
         const createResult = document.createElement("div")
         createResult.classList.add("result")
-        body.appendChild(createTurn)
-        body.appendChild(createBoard)
-        body.appendChild(createResult)
+        container.appendChild(createTurn)
+        container.appendChild(createBoard)
+        container.appendChild(createResult)
         Screen();
     }
 })
@@ -240,9 +247,9 @@ function GameFlow(
 
 function Screen() {
     const game = GameFlow();
-
+    const result = document.querySelector(".result")
+    result.textContent = ""
     const boardDiv = document.querySelector(".board")
-
     const updateScreen = () => {
         boardDiv.textContent = "";
         const board = game.getBoard();
