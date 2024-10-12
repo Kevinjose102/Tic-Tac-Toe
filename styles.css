@@ -1,6 +1,8 @@
 :root{
     --orange-text: rgb(235, 167, 42);
     --background-color: rgb(42, 41, 44);
+    --grid-color: rgb(73, 72, 77);
+    --grid-color-hover: rgb(110, 109, 115);
 }
 
 *{
@@ -24,23 +26,25 @@ body{
     flex-direction: column;
     background-color: var(--background-color);
 }
-
 .heading{
     font-size: 80px;
     font-family: "Audiowide";
     font-weight: bold;
     padding: 30px;
     padding-bottom: 0;
-    color: var(--orange-text);
+    background-image: linear-gradient(to right, rgb(245, 101, 101) 30%, rgb(102, 102, 234) 60%);
+    -webkit-background-clip: text;
+    color: transparent;
 }
 .play{
-    border: 3px solid white;
+    border: 2px solid rgb(72, 207, 72);
     border-radius: 10px;
     padding: 15px;
     padding-left: 25px;
     padding-right: 25px;
+    max-width: 270px;
     font-size: 45px;
-    background-color: var(--background-color);
+    background-color: rgba(10, 44, 1, 0.659);
     font-family: "Audiowide";
     color: rgb(72, 207, 72);
     font-weight: bold;
@@ -50,8 +54,7 @@ body{
 .play:hover{
     color: rgb(82, 255, 82);
     cursor: pointer;
-    background-color: rgb(34, 34, 34);
-    font-size: 50px;
+    background-color: rgb(14, 47, 5);
 }
 
 .play:active{
@@ -59,17 +62,138 @@ body{
     outline: none;
 }
 
+dialog[open]{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    font-family: "Audiowide";
+    padding: 30px;
+    gap: 20px;
+    font-size: 25px;
+    border-radius: 20px;
+    background-color: rgb(225, 225, 225);
+}
+
+dialog[open] > .player-header{
+    height: 40px;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.x{
+    color: rgb(245, 101, 101);
+}
+
+.o{
+    color: rgb(32, 32, 230);
+}
+dialog[open] > div > input{
+    border: none;
+    outline: none;
+    padding: 15px;
+    font-size: 20px;
+    border-radius: 10px;
+    font-family: "Audiowide";
+}
+dialog[open] > div > .error{
+    font-size: 16px;
+    font-family: monospace;
+    font-weight: bold;
+    color: orangered;
+    padding: 7px;
+}
+dialog[open] > .next , dialog[open] > .submit{
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: rgba(64, 210, 64, 0.33);
+    font-family: "Audiowide";
+    transition: all ease-in-out 0.14s;
+}
+
+dialog[open] > .next:hover , dialog[open] > .submit:hover{
+    cursor: pointer;
+    background-color: rgba(64, 210, 64, 0.503);
+}
+dialog[open] > .cancel{
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    background-color: rgba(239, 27, 27, 0.33);
+    font-family: "Audiowide";
+}
+dialog[open] > .cancel:hover{
+    cursor: pointer;
+    background-color: rgba(239, 27, 27, 0.503);
+}
+
+.main-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+.container{
+    padding-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 20px;
+    color: white;
+}
+
+.turn, .result{
+    font-size: 30px;
+    font-family: 'Audiowide';
+}
+
 .board{
     display: grid;
     grid-template-columns: repeat(3,1fr);
     grid-template-rows: repeat(3,1fr);
-    width: 200px;
-    height: 200px;
+    width: 35vw;
+    height: 35vw;
+    max-width: 400px;
+    max-height: 400px;
+    min-height: 300px;
+    min-width: 300px;
+    gap: 15px;
 }
 
 .board > button{
     width: 100%;
     height: 100%;
+    border: none;
+    border-radius: 10px;
+    font-size: 70px;
+    font-family: "Audiowide";
+    background-color: var(--grid-color);
+}
+
+.board > .unactive{
+    transition: all ease-in-out 0.13s;
+}
+
+.board > .unactive:hover{
+    cursor: pointer;
+    background-color: var(--grid-color-hover);
+    border: 2px solid rgb(207, 207, 207);
+    box-shadow: rgba(255, 255, 255, 0.716) 0px 2px 8px 0px;
+}
+
+.board > .active:hover{
+    cursor: not-allowed;
+}
+
+.board > .won{
+    background-color: green;
 }
 
 .footer{
@@ -77,12 +201,30 @@ body{
     font-size: 18px;
     padding: 5px;
     padding-top: 110px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 a{
     color: var(--orange-text);
+    text-decoration: none;
 }
 
 a:hover{
-    color: white;
+    color: white;   
+}
+
+.svg{
+    transform: scale(0.6);
+    transition: all ease-in-out 0.17s;
+}
+.svg:hover{
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 412px){
+    .heading{
+        font-size: 30px;
+    }
 }

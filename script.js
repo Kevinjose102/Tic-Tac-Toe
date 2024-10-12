@@ -6,18 +6,20 @@ let globalWon = false;
 let playerone;
 let playertwo;
 
+
 const dialogOne = document.querySelector(".playerone")
 const dialogTwo = document.querySelector(".playertwo")
 const nextButton = document.querySelector(".next")
 const submitButton = document.querySelector(".submit")
 const cancelButtons = document.querySelectorAll(".cancel")
 const playButton = document.querySelector(".play")
-nextButton.value = "next"
+nextButton.value = "Next"
 //inputs from the user
 const player1name = document.querySelector(".name1")
 const player2name = document.querySelector(".name2")
 const error = document.querySelectorAll(".error")
-
+error[0].textContent = ""
+error[1].textContent = ""
 const body = document.querySelector("body")
 const container = document.querySelector(".container")
 playButton.addEventListener("click", () => {
@@ -35,6 +37,9 @@ playButton.addEventListener("click", () => {
 
 cancelButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
+        error[0].textContent = ""
+        error[1].textContent = ""
+        playButton.textContent = "PLAY"
         dialogOne.close();
         dialogTwo.close();
     })
@@ -158,6 +163,7 @@ function GameFlow(
             }
         }
         else{
+
             return;
         }
     }
@@ -232,8 +238,7 @@ function GameFlow(
                 printNewRound(won);
                 globalWon = true;
                 const result = document.querySelector(".result")
-                result.textContent = getActivePlayer().name +  " won the round"
-                playButton.textContent = "PLAY"
+                result.textContent = getActivePlayer().name +  " won the round!!"
                 return;
             } else {
                 switchTurn(won);
@@ -256,7 +261,17 @@ function Screen() {
         const playerTurn = document.querySelector(".turn")
         const activePlayer = game.getActivePlayer();
 
-        playerTurn.textContent = `${activePlayer.name}'s turn..`
+        if(!globalWon){
+            if(activePlayer.token == 1){
+                playerTurn.textContent = `${activePlayer.name}'s turn` + " : X"
+            }
+            else{
+                playerTurn.textContent = `${activePlayer.name}'s turn` + " : O"
+            }
+        }
+        else{
+            playerTurn.textContent = ""
+        }
 
         //for the buttons on the board
         board.forEach((row, indexRow) => {
@@ -268,9 +283,18 @@ function Screen() {
 
                 if(cell.getValue() == 1){
                     cellButton.textContent = "X"
+                    cellButton.style.color = "rgb(245, 101, 101)"
+                    cellButton.classList.remove("unactive")
+                    cellButton.classList.add("active")
                 }
                 else if(cell.getValue() == 2){
                     cellButton.textContent = "O"
+                    cellButton.style.color = "rgb(102, 102, 234)"
+                    cellButton.classList.remove("unactive")
+                    cellButton.classList.add("active")
+                }
+                else{
+                    cellButton.classList.add("unactive")
                 }
                 boardDiv.appendChild(cellButton);
             })
@@ -291,3 +315,4 @@ function clickHandlerBoard(e) {
 boardDiv.addEventListener("click", clickHandlerBoard);
 updateScreen();
 }
+
