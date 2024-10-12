@@ -6,7 +6,6 @@ let globalWon = false;
 let playerone;
 let playertwo;
 
-
 const dialogOne = document.querySelector(".playerone")
 const dialogTwo = document.querySelector(".playertwo")
 const nextButton = document.querySelector(".next")
@@ -14,18 +13,23 @@ const submitButton = document.querySelector(".submit")
 const cancelButtons = document.querySelectorAll(".cancel")
 const playButton = document.querySelector(".play")
 nextButton.value = "Next"
+
 //inputs from the user
 const player1name = document.querySelector(".name1")
 const player2name = document.querySelector(".name2")
 const error = document.querySelectorAll(".error")
 error[0].textContent = ""
 error[1].textContent = ""
+
 const body = document.querySelector("body")
 const container = document.querySelector(".container")
+
+
 playButton.addEventListener("click", () => {
     dialogOne.showModal();
     globalWon = false
-
+    error[0].textContent = ""
+    error[1].textContent = ""
     const delturn = document.querySelector(".turn")
     const delboard = document.querySelector(".board")
     const delresult = document.querySelector(".result")
@@ -191,47 +195,66 @@ function GameFlow(
             //flag will remain 0 if the active player has won
             //else will change to 1
             let won = true;
-        
+            let update = true;
             // Check row
             for (let i = 0; i < 3; i++) {
                 if (board.getBoard()[row][i].getValue() !== getActivePlayer().token) {
                     won = false;
+                    update = false
                     break;
                 }
             }
-        
+            if(won && update){
+                winUpdate("row", row)
+                update = false
+            }
             // Check column
             if (!won) { 
                 won = true;
+                update = true;
                 for (let i = 0; i < 3; i++) {
                     if (board.getBoard()[i][column].getValue() !== getActivePlayer().token) {
                         won = false;
+                        update = false
                         break;
                     }
                 }
             }
-        
+            if(won && update){
+                winUpdate("column", column)
+                update = false
+            }
             // Check diagonals if row and column are on a diagonal
             if (!won && row === column) {
                 won = true;
+                update = true;
                 for (let i = 0; i < 3; i++) {
                     if (board.getBoard()[i][i].getValue() !== getActivePlayer().token) {
                         won = false;
+                        update = false
                         break;
                     }
                 }
             }
-        
+            if(won && update){
+                winUpdate("diagonal", 3)
+                update = false
+            }
             if (!won){
                 won = true;
+                update = true;
                 for (let i = 0; i < 3; i++) {
                     if (board.getBoard()[i][2 - i].getValue() !== getActivePlayer().token) {
                         won = false;
+                        update = false
                         break;
                     }
                 }
             }
-        
+            if(won && update){
+                winUpdate("reverse-diagonal", 3)
+                update = false
+            }
             if (won) {
                 //should stop the game
                 switchTurn(won);
@@ -316,3 +339,9 @@ boardDiv.addEventListener("click", clickHandlerBoard);
 updateScreen();
 }
 
+function winUpdate(set, index){
+    const boardButtons = document.querySelectorAll(".cell")
+    boardButtons.forEach((btn) => {
+        btn.style.color = "yellow"
+    })
+}

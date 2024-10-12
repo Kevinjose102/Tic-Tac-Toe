@@ -35,6 +35,7 @@ body{
     background-image: linear-gradient(to right, rgb(245, 101, 101) 30%, rgb(102, 102, 234) 60%);
     -webkit-background-clip: text;
     color: transparent;
+    text-align: center;
 }
 .play{
     border: 2px solid rgb(72, 207, 72);
@@ -192,8 +193,9 @@ dialog[open] > .cancel:hover{
     cursor: not-allowed;
 }
 
-.board > .won{
-    background-color: green;
+.won{
+    background-color: green !important;
+    color: white;
 }
 
 .footer{
