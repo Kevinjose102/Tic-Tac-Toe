@@ -194,8 +194,9 @@ dialog[open] > .cancel:hover{
 }
 
 .won{
-    background-color: green !important;
-    color: white;
+    background-color: rgb(72, 207, 72) !important;
+    color: rgb(246, 246, 246) !important;
+    border: 3px solid rgb(246, 246, 246) !important;
 }
 
 .footer{
@@ -205,7 +206,7 @@ dialog[open] > .cancel:hover{
     padding-top: 110px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 1px;
 }
 
 a{
@@ -218,7 +219,7 @@ a:hover{
 }
 
 .svg{
-    transform: scale(0.6);
+    transform: scale(0.5);
     transition: all ease-in-out 0.17s;
 }
 .svg:hover{
@@ -228,5 +229,8 @@ a:hover{
 @media only screen and (max-width: 412px){
     .heading{
         font-size: 30px;
+    }
+    .footer{
+        transform: scale(0.8);
     }
 }

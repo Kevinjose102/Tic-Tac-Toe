@@ -25,6 +25,9 @@ const body = document.querySelector("body")
 const container = document.querySelector(".container")
 
 
+let row1,col1,row2,col2,row3,col3;
+
+
 playButton.addEventListener("click", () => {
     dialogOne.showModal();
     globalWon = false
@@ -33,6 +36,7 @@ playButton.addEventListener("click", () => {
     const delturn = document.querySelector(".turn")
     const delboard = document.querySelector(".board")
     const delresult = document.querySelector(".result")
+    row1 = col1 = row2 = col2 = row3 = col3 = -1;
     //clearing the old grid
     container.removeChild(delturn)
     container.removeChild(delboard)
@@ -195,41 +199,75 @@ function GameFlow(
             //flag will remain 0 if the active player has won
             //else will change to 1
             let won = true;
+            let update = true
             // Check row
             for (let i = 0; i < 3; i++) {
                 if (board.getBoard()[row][i].getValue() !== getActivePlayer().token) {
                     won = false;
+                    update = false;
                     break;
                 }
+            }
+            if(won && update){
+                row1 = row2 = row3 = row;
+                col1 = 0;
+                col2 = 1;
+                col3 = 2;
+                update = false
             }
             // Check column
             if (!won) { 
                 won = true;
+                update = true
                 for (let i = 0; i < 3; i++) {
                     if (board.getBoard()[i][column].getValue() !== getActivePlayer().token) {
                         won = false;
+                        update = false;
                         break;
                     }
                 }
+            }
+            if(won && update){
+                col1 = col2 = col3 = column;
+                row1 = 0;
+                row2 = 1;
+                row3 = 2;
+                update = false
             }
             // Check diagonals if row and column are on a diagonal
             if (!won && row === column) {
                 won = true;
+                update = true;
                 for (let i = 0; i < 3; i++) {
                     if (board.getBoard()[i][i].getValue() !== getActivePlayer().token) {
                         won = false;
+                        update = false;
                         break;
                     }
                 }
             }
+            if(won && update){
+                row1 = 0, col1 = 0;
+                row2 = col2 = 1;
+                row3 = 2, col3 = 2;
+                update = false
+            }
             if (!won){
                 won = true;
+                update = true;
                 for (let i = 0; i < 3; i++) {
                     if (board.getBoard()[i][2 - i].getValue() !== getActivePlayer().token) {
                         won = false;
+                        update = false;
                         break;
                     }
                 }
+            }
+            if(won && update){
+                row1 = 0, col1 = 2;
+                row2 = col2 = 1;
+                row3 = 2, col3 = 0;
+                update = false
             }
             if (won) {
                 //should stop the game
@@ -274,12 +312,18 @@ function Screen() {
 
         //for the buttons on the board
         board.forEach((row, indexRow) => {
-            row.forEach((cell, index) => {
+            row.forEach((cell, indexColumn) => {
                 const cellButton = document.createElement("button")
                 cellButton.classList.add("cell")
-                cellButton.dataset.column = index
+                cellButton.dataset.column = indexColumn
                 cellButton.dataset.row = indexRow
-
+                console.log(row1, row2, row3, col1, col2, col3)
+                console.log(indexRow, indexColumn)
+                if((indexColumn == col1 && indexRow == row1) || (indexColumn == col2 && indexRow == row2) 
+                    || (indexColumn == col3 && indexRow == row3)){
+                    
+                    cellButton.classList.add("won")
+                }
                 if(cell.getValue() == 1){
                     cellButton.textContent = "X"
                     cellButton.style.color = "rgb(245, 101, 101)"
@@ -302,7 +346,6 @@ function Screen() {
 
 
 function clickHandlerBoard(e) {
-
     const selectedColumn = e.target.dataset.column;
     const selectedRow = e.target.dataset.row;
     if(!selectedColumn || !selectedRow) return;
