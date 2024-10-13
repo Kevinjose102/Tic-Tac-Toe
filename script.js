@@ -317,8 +317,6 @@ function Screen() {
                 cellButton.classList.add("cell")
                 cellButton.dataset.column = indexColumn
                 cellButton.dataset.row = indexRow
-                console.log(row1, row2, row3, col1, col2, col3)
-                console.log(indexRow, indexColumn)
                 if((indexColumn == col1 && indexRow == row1) || (indexColumn == col2 && indexRow == row2) 
                     || (indexColumn == col3 && indexRow == row3)){
                     
@@ -342,6 +340,12 @@ function Screen() {
                 boardDiv.appendChild(cellButton);
             })
         })
+        const buttons = document.querySelectorAll(".unactive")
+        console.log(buttons.length)
+        if(buttons.length == 0 && !globalWon){
+            result.textContent = "It was Draw"
+            playerTurn.textContent = ""
+        }
     }
 
 
