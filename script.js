@@ -343,7 +343,7 @@ function Screen() {
         const buttons = document.querySelectorAll(".unactive")
         console.log(buttons.length)
         if(buttons.length == 0 && !globalWon){
-            result.textContent = "It was Draw"
+            result.textContent = "It is a Draw"
             playerTurn.textContent = ""
         }
     }
